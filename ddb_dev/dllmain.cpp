@@ -10,30 +10,15 @@ VOID(__cdecl* UnhookFunction)(ULONG_PTR Function);
 ULONG_PTR(__cdecl* GetOriginalFunction)(ULONG_PTR Hook);
 
 HMODULE lib_ptr = NULL;
+bool (*is_global_id_enabled_orig)(void* db, unsigned id);
 
     
 #pragma comment(linker, "/EXPORT:?is_global_id_enabled@DEV_DIE_INFO@@QEBA_NI@Z=is_global_id_enabled_patch")
 extern "C" bool __cdecl is_global_id_enabled_patch(void* db, unsigned int id) 
 {
-    OutputDebugString(L"in patched is_global_id");
-
     if (id == 1174964) // global id of forbidden PCIe block
        return true;
-
-    bool (*is_global_id_enabled_orig)(void* db, unsigned id) = (bool(__cdecl*)(void*, unsigned int))GetOriginalFunction((ULONG_PTR)is_global_id_enabled_patch);
-
-    OutputDebugString(L"calling original is_global_id");
-    bool next_result = is_global_id_enabled_orig(db, id);
-    OutputDebugString(L"returned from original is_global_id");
-    if (!next_result)
-    {   // something else disabled, print it for interest's sake
-        sprintf_s(buffer, "disabled %u\n", id);
-        OutputDebugStringA(buffer);
-    }
-
-    OutputDebugString(L"returning from patched is_global_id");
-
-    return next_result;
+    return is_global_id_enabled_orig(db, id);
 }
 
 void patchLibrary() {
@@ -69,6 +54,8 @@ void patchLibrary() {
         return;
     }
 
+    is_global_id_enabled_orig = (bool(__cdecl*)(void*, unsigned int))GetOriginalFunction((ULONG_PTR)is_global_id_enabled_patch);
+
     OutputDebugString(L"hooked global_id function");
 }
 
@@ -101,18 +88,6 @@ BOOL setupHookLib()
     return true;
 }
 
-DWORD WINAPI ThreadMain(LPVOID lpParam)
-{
-    OutputDebugString(L"setup hooking start");
-    if (setupHookLib())
-    {
-        patchLibrary();
-    }
-    OutputDebugString(L"setup hooking finished");
-
-    return 0;
-}
-
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
@@ -122,9 +97,12 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     {
     case DLL_PROCESS_ATTACH:
         {
-            OutputDebugString(L"ddb_dev wrapper - process attach start");
-            DWORD dwThreadId;
-            HANDLE hThread = CreateThread(NULL, 0, ThreadMain, NULL, 0, &dwThreadId);
+            OutputDebugString(L"setup hooking start");
+            if (setupHookLib())
+            {
+                patchLibrary();
+            }
+            OutputDebugString(L"setup hooking finished");
         }
         break;
     case DLL_THREAD_ATTACH:

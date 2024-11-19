@@ -1093,7 +1093,6 @@
 #pragma comment(linker, "/export:?is_data_loaded@DEV_ROUTING_SWITCH_INFO@@QEAA_NXZ=ddb_dev_orig.?is_data_loaded@DEV_ROUTING_SWITCH_INFO@@QEAA_NXZ")
 #pragma comment(linker, "/export:?is_disp@DEV_ACE_INFO@@QEAA_NW4DEV_ELEMENT_ENUM@@@Z=ddb_dev_orig.?is_disp@DEV_ACE_INFO@@QEAA_NW4DEV_ELEMENT_ENUM@@@Z")
 #pragma comment(linker, "/export:?is_disp@DEV_ACE_INFO_BODY@@QEAA_NW4DEV_ELEMENT_ENUM@@@Z=ddb_dev_orig.?is_disp@DEV_ACE_INFO_BODY@@QEAA_NW4DEV_ELEMENT_ENUM@@@Z")
-//#pragma comment(linker, "/export:?is_global_id_enabled@DEV_DIE_INFO@@QEBA_NI@Z=ddb_dev_orig.?is_global_id_enabled@DEV_DIE_INFO@@QEBA_NI@Z")
 #pragma comment(linker, "/export:?is_global_id_enabled@DEV_DIE_INFO_BODY@@QEBA_NI@Z=ddb_dev_orig.?is_global_id_enabled@DEV_DIE_INFO_BODY@@QEBA_NI@Z")
 #pragma comment(linker, "/export:?is_hssi@DEV_ACE_INFO@@QEAA_NW4DEV_ELEMENT_ENUM@@@Z=ddb_dev_orig.?is_hssi@DEV_ACE_INFO@@QEAA_NW4DEV_ELEMENT_ENUM@@@Z")
 #pragma comment(linker, "/export:?is_hssi@DEV_ACE_INFO_BODY@@QEAA_NW4DEV_ELEMENT_ENUM@@@Z=ddb_dev_orig.?is_hssi@DEV_ACE_INFO_BODY@@QEAA_NW4DEV_ELEMENT_ENUM@@@Z")
